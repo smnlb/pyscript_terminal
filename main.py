@@ -43,9 +43,9 @@ def expand_single_sci_notation(xpr):
     e_index = xpr.find("E")
     pre = xpr[:e_index]
     post = int(xpr[e_index+1:])
-    if post < 0: return f"0.{"0"*(-post-1)}{pre}"
+    if post < 0: return f"0.{'0' * (-post - 1)}{pre}" 
     if post == 0: return pre
-    if post > 0: return f"{pre}{"0"*post}"
+    if post > 0: return f"{pre}{'0' * post}"
 
 def expand_scientific_notation(xpr):
     while "E" in xpr:
@@ -85,6 +85,7 @@ def subtraction(a: str, b: str) -> str:
 def multiplication(a: str, b: str) -> str:
     a_value, a_uncertainty = parse_value_and_uncertainty(a)
     b_value, b_uncertainty = parse_value_and_uncertainty(b)
+    if b_value == 0 or a_value == 0: return "NaN"
     result = a_value * b_value
     uncertainty = result * ((a_uncertainty / a_value) + (b_uncertainty / b_value))
     return f"{result}[{uncertainty}]"
@@ -93,12 +94,14 @@ def multiplication(a: str, b: str) -> str:
 def division(a: str, b: str) -> str:
     a_value, a_uncertainty = parse_value_and_uncertainty(a)
     b_value, b_uncertainty = parse_value_and_uncertainty(b)
+    if b_value == 0 or a_value == 0: return "NaN"
     result = a_value / b_value
     uncertainty = result * ((a_uncertainty / a_value) + (b_uncertainty / b_value))
     return f"{result}[{uncertainty}]"
 
 
 def parse_value_and_uncertainty(n: str) -> tuple[float, float]:
+    if n == "NaN": return n
     uncertainty_left_index = n.find("[")
     value = float(n[0:uncertainty_left_index])
     uncertainty = float(n[uncertainty_left_index + 1:-1])
@@ -107,6 +110,8 @@ def parse_value_and_uncertainty(n: str) -> tuple[float, float]:
 
 def parse(s: str) -> str:
     def evaluate(expression: str) -> str:
+
+        if expression == "NaN": return expression
 
         expression = expand_scientific_notation(expression)
         expression = expression.replace("+-", "-").replace("-+", "-").replace("--", "+")
@@ -137,7 +142,9 @@ def parse(s: str) -> str:
                     
                 operator_index = expression.find(operator)
                 left, right = get_arguments(expression, operator_index)
-                expression = expression.replace(f"{left}{operator}{right}", operators[operator](left, right), 1)
+                answer = operators[operator](left, right)
+                if answer == "NaN": return answer
+                expression = expression.replace(f"{left}{operator}{right}", answer, 1)
         return expression
 
     def get_arguments(expression: str, operator_index: int) -> tuple[str, str]:
@@ -258,6 +265,8 @@ while y:
             expression = expression.replace(var, str(value))
 
         n = parse_value_and_uncertainty(parse(expression))
+
+        if n == "NaN": expression_column.append("NaN"); continue
         value_formatted = str(round_to_sig_figs(n[0], minimum_sf))
         uncertainty_formatted = str(round_to_sig_figs(n[1], 1))
         if value_formatted[-1] == ".": value_formatted = value_formatted[:-1]

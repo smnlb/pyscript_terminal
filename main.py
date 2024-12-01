@@ -43,9 +43,9 @@ def expand_single_sci_notation(xpr):
     e_index = xpr.find("e")
     pre = xpr[:e_index]
     post = int(xpr[e_index+1:])
-    if post < 0: return f"0.{"0"*(-post-1)}{pre}"
+    if post < 0: return f"0.{'0' * (-post - 1)}{pre}"
     if post == 0: return pre
-    if post > 0: return f"{pre}{"0"*post}"
+    if post > 0: return f"{pre}{'0' * post}"
 
 def expand_scientific_notation(xpr):
     while "e" in xpr:

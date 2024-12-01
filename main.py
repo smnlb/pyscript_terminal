@@ -1,3 +1,8 @@
+# 300 lines of straight waffle
+# if you find a bug, issue an issue
+# if you can make a bug fix or improve performance / readability, pull a pull request
+
+
 # libraries
 import re
 from decimal import Decimal
@@ -16,14 +21,47 @@ INVALID_NUMBER_ERROR = "Your number was not formatted properly, please try again
 
 # utility functions
 
-# these next two functions are ripped straight off stack overflow and minorly editted
+# these next two functions are ripped straight off from stack overflow and editted
 
 def round_to_sig_figs(num: float, num_of_sf : int):
-    if num < 999: return np.format_float_positional(num, precision=num_of_sf, unique=False, fractional=False, trim='k')
-    else: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("E", "e").replace("+", "")
+    if abs(num) < 999 and abs(num) > 0.001: 
+        txt = np.format_float_positional(num, precision=num_of_sf, unique=False, fractional=False, trim='k')
+        if txt[-1] == ".": txt = txt[:-1] # sometimes ends in . for no
+        return txt
+    else:
+        # huh? these two ifs resolve to the same thing but without it, it doesn't work for negatives?
+        # probably some branch prediction nonsense
+        # im not gonna question it: if it ain't broke, don't fix it.
+        if num >= 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("E", "e").replace("+", "")
+        if num < 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("E", "e").replace("+", "")
 
 def count_sigfigs(numstr) -> int:
     return len(Decimal(numstr).normalize().as_tuple().digits)
+
+
+def expand_single_sci_notation(xpr):
+    e_index = xpr.find("e")
+    pre = xpr[:e_index]
+    post = int(xpr[e_index+1:])
+    if post < 0: return f"0.{"0"*(-post-1)}{pre}"
+    if post == 0: return pre
+    if post > 0: return f"{pre}{"0"*post}"
+
+def expand_scientific_notation(xpr):
+    while "e" in xpr:
+        e_index = xpr.find("e")
+        left_index = e_index - 1
+        right_index = e_index + 1
+        while left_index > 0 and xpr[left_index].isdigit():
+            left_index -= 1
+        if left_index != 0: left_index += 1
+        while right_index < len(xpr) and (xpr[right_index].isdigit() or xpr[right_index] == "-"):
+            right_index += 1
+
+        region = xpr[left_index:right_index]
+        xpr = xpr.replace(region, expand_single_sci_notation(region))
+    return xpr
+
 
 def is_valid_number(s: str) -> float | bool:
     try:
@@ -71,7 +109,10 @@ def parse_value_and_uncertainty(n: str) -> tuple[float, float]:
 def parse(s: str) -> str:
     def evaluate(expression: str) -> str:
 
+        expression = expand_scientific_notation(expression)
         expression = expression.replace("+-", "-").replace("-+", "-").replace("--", "+")
+
+
 
         while "(" in expression:
             last_open_bracket_index = expression.rfind("(")
@@ -84,6 +125,7 @@ def parse(s: str) -> str:
         for operator in rawOperatorSet:
             while operator in expression:
                 subCount = expression.count("-")
+
                 if subCount == 1:
 
                     hasOtherOperations = False
@@ -123,7 +165,7 @@ def parse(s: str) -> str:
     return evaluate(s)
 
 def is_valid_number_with_uncertainty(n) -> bool:
-    pattern = r'^-?\d+(\.\d+)?(e-?\d+)?\[-?\d+(\.\d+)?(e-?\d+)?\]$'
+    pattern = r'^-?\d+(\.\d+)?(e[+-]?\d+)?\[-?\d+(\.\d+)?(e[+-]?\d+)?\]$'
     return bool(re.match(pattern, n))
 
 def populate_column_variables(column : int) -> list[str]:

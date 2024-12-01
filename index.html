@@ -16,6 +16,7 @@
     <input id="output" type="text" disabled>
 
     <py-script>
+        from js import document
         def handle_input():
             user_input = document.getElementById("user_input").value
             result = process_input(user_input)

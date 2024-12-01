@@ -26,30 +26,30 @@ INVALID_NUMBER_ERROR = "Your number was not formatted properly, please try again
 def round_to_sig_figs(num: float, num_of_sf : int):
     if abs(num) < 999 and abs(num) > 0.001: 
         txt = np.format_float_positional(num, precision=num_of_sf, unique=False, fractional=False, trim='k')
-        if txt[-1] == ".": txt = txt[:-1] # sometimes ends in . for no
+        if txt[-1] == ".": txt = txt[:-1] # sometimes ends in . for no reason
         return txt
     else:
         # huh? these two ifs resolve to the same thing but without it, it doesn't work for negatives?
         # probably some branch prediction nonsense
         # im not gonna question it: if it ain't broke, don't fix it.
-        if num >= 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("E", "e").replace("+", "")
-        if num < 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("E", "e").replace("+", "")
+        if num >= 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("+", "")
+        if num < 0: return f"{Decimal(num):.{max(0, num_of_sf-1)}E}".replace("+", "")
 
 def count_sigfigs(numstr) -> int:
     return len(Decimal(numstr).normalize().as_tuple().digits)
 
 
 def expand_single_sci_notation(xpr):
-    e_index = xpr.find("e")
+    e_index = xpr.find("E")
     pre = xpr[:e_index]
     post = int(xpr[e_index+1:])
-    if post < 0: return f"0.{'0' * (-post - 1)}{pre}"
+    if post < 0: return f"0.{"0"*(-post-1)}{pre}"
     if post == 0: return pre
-    if post > 0: return f"{pre}{'0' * post}"
+    if post > 0: return f"{pre}{"0"*post}"
 
 def expand_scientific_notation(xpr):
-    while "e" in xpr:
-        e_index = xpr.find("e")
+    while "E" in xpr:
+        e_index = xpr.find("E")
         left_index = e_index - 1
         right_index = e_index + 1
         while left_index > 0 and xpr[left_index].isdigit():
@@ -61,7 +61,6 @@ def expand_scientific_notation(xpr):
         region = xpr[left_index:right_index]
         xpr = xpr.replace(region, expand_single_sci_notation(region))
     return xpr
-
 
 def is_valid_number(s: str) -> float | bool:
     try:
@@ -165,7 +164,7 @@ def parse(s: str) -> str:
     return evaluate(s)
 
 def is_valid_number_with_uncertainty(n) -> bool:
-    pattern = r'^-?\d+(\.\d+)?(e[+-]?\d+)?\[-?\d+(\.\d+)?(e[+-]?\d+)?\]$'
+    pattern = r'^-?\d+(\.\d+)?(E[+-]?\d+)?\[-?\d+(\.\d+)?(E[+-]?\d+)?\]$'
     return bool(re.match(pattern, n))
 
 def populate_column_variables(column : int) -> list[str]:
@@ -177,7 +176,7 @@ print("enter your table of results 1 row at a time; each value must have an unce
 print("this can be achieved by adding square brackets afterwards, e.g. 4[0.01]")
 print("separate the columns in the rows using commas; incorrectly formatted rows must be redone")
 print("end the table by entering \"end\" without quotes")
-print("use e for x10^: e.g. 1e3 = 1000, 1e-3 = 0.001 ")
+print("use E for x10^: e.g. 1E3 = 1000, 1E-3 = 0.001 ")
 print("(e.g. 1 row would be \"24[0.01], 40[0.001]\". spaces do not matter.)")
 
 # gathering data

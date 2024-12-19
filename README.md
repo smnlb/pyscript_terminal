@@ -1,13 +1,8 @@
 # uncertainty-calculator
+you can access this on the web [here](https://nathenjacobe.github.io/uncertainty-calculator/)
+do NOT use firefox if you are going to use the web version; it is unstable for some reason. Chrome seems to work half the time - good enough.
 
-for a web demo, see [here](https://hub.binder.curvenote.dev/user/nathenjacobe-un-inty-calculator-wbjstfji/lab): 
-
-instructions for use:
-1. click the big blue + sign in the top left
-2. scroll down to other
-3. click Terminal (the one with the $_ symbol)
-4. type python main.py into the kernel
-5. hit enter
+if it doesn't work on the web, you'll have to use the standalone.
 
 working out uncertainties for everything was boring so why do that when you can make a computer do it for you :)
 
@@ -19,5 +14,4 @@ list of things to be implemented:
 - other general column / row specific functions like st. dev. and mean
 - make the code more readable
 
-at this point im just reinventing excel.
-
+at this point im just reinventing excel

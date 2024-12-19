@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script src="./mini-coi.js" scope="./"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.4.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.4.1/core.js"></script>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <h2>Submit Input to Python</h2>
-    <input id="user_input" type="text" placeholder="Enter text">
-    <button id="submit_btn">Submit</button>
+    <h1 class="title">Uncertainty Calculator</h1>
+    <h2 class="subtitle">Loading may take a few seconds; please be patient.</h2>
 
-    <h2>Output</h2>
-    <input id="output" type="text" disabled>
+    <div id="terminal">
+        <script id="console" type="py" src="./main.py" config="./pyscript.toml" terminal worker></script>
+    </div>
 
-    <py-script>
-        from js import document
-        def handle_input():
-            user_input = document.getElementById("user_input").value
-            result = process_input(user_input)
-            document.getElementById("output").value = result
+    <div class="explanation">
+        that took an unexpectedly long time <br>
+        i would've made a proper UI but the terminal seemed more convenient :)
+    </div>
 
-        def process_input(user_input):
-            return f"Processed: {user_input}"
-
-        def handle_output(result):
-            document.getElementById("output").value = result
-        document.getElementById("submit_btn").addEventListener("click", handle_input)
-    </py-script>
+    
 </body>
+
 </html>

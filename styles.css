@@ -1,0 +1,23 @@
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: xxx-large;
+    margin-bottom: 0%;
+}
+
+.subtitle {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    text-align: center;
+    font-size: x-large;
+    margin-top: 0%;
+}
+
+.explanation {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    text-align: center;
+    font-size: medium;
+    margin-top: 2%;
+}

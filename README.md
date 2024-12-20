@@ -1,8 +1,8 @@
 # uncertainty-calculator
 you can access this on the web [here](https://nathenjacobe.github.io/uncertainty-calculator/)
-do NOT use firefox if you are going to use the web version; it is unstable for some reason. Chrome seems to work half the time - good enough.
+as of 20/12/24, Firefox is now supported. if you encounter an error, reload (ctrl + r) to restart the program.
 
-if it doesn't work on the web, you'll have to use the standalone.
+if it doesn't work on the web for any reason, you'll have to use the standalone.
 
 working out uncertainties for everything was boring so why do that when you can make a computer do it for you :)
 

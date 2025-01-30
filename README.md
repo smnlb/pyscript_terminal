@@ -14,4 +14,4 @@ list of things to be implemented:
 - other general column / row specific functions like st. dev. and mean
 - make the code more readable
 
-at this point im just reinventing excel
+this is a slightly worse version of excel

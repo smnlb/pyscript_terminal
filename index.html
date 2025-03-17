@@ -44,10 +44,23 @@
     </p>
     <h2 class="subtitle">Loading may take a few seconds; please be patient.</h2>
 
+    <section class="pyscript">
+    <b>
+     <p>
+      Now is 
+      <script type="py">
+         from pyscript import display
+         from datetime import datetime
+         now = datetime.now()
+         display(now.strftime("%m/%d/%Y, %H:%M:%S"))
+      </script>
+     </p>
+    </b>
     <div id="terminal">
         <script id="console" type="py" src="./main.py" config="./pyscript.toml" terminal worker></script>
     </div>
-
+    </section>
+         
     <div class="explanation">
         I tried to make the right user interface, but the terminal seemed more convenient.
     </div>    

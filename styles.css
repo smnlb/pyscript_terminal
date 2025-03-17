@@ -1,23 +1,57 @@
-.title {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 300;
-    text-align: center;
-    font-size: xxx-large;
-    margin-bottom: 0%;
+p {
+  background-color: #eee; /* Светло-серый фон */
+}
+dialog::backdrop {
+  background: rgba(21, 23, 25, 1);
 }
 
-.subtitle {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 200;
-    text-align: center;
-    font-size: x-large;
-    margin-top: 0%;
+// <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 100 to 800
+
+.ubuntu-sans-font {
+  font-family: "Ubuntu Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
 }
 
-.explanation {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 200;
-    text-align: center;
-    font-size: medium;
-    margin-top: 2%;
+/* Отступы */
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid purple;
+}
+
+thead th:nth-child(1) {
+  width: 30%;
+}
+
+thead th:nth-child(2) {
+  width: 20%;
+}
+
+thead th:nth-child(3) {
+  width: 15%;
+}
+
+thead th:nth-child(4) {
+  width: 35%;
+}
+
+legend {
+  background-color: #000;
+  color: #fff;
+  padding: 3px 6px;
+}
+
+input {
+  margin: 0.4rem;
+}
+
+th,
+td {
+  padding: 20px;
 }

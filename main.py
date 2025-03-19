@@ -119,17 +119,19 @@ def control():
             days()
             cl=True
     else:
-        print(f'\nНе удалось найти подходящее распределение.\nПопробуйте изменить максимальное значение для амплитуды весов или нажмите enter.')
+        print(f'\nНе удалось найти подходящее распределение.\nПопробуйте изменить максимальное значение для амплитуды весов.')
+        mx=input()
         try:
-            mx=float(input())
+            mx=float(mx)
             fl=True
-            print('mx=float(input())')
+            print('mx=float(mx)')
         except:
             fl=False
             print('except')
-        if fl!=False:
+        if fl=True:
             cl=True
-        print(f'Чтобы изменить расписание, введите "расписание".')
+            print('control()')
+        print('Чтобы изменить расписание, введите "расписание".')
         ee=input()
         if ee=='расписание':
             days()

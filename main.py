@@ -128,7 +128,7 @@ def control():
         except:
             fl=False
             print('except')
-        if fl=True:
+        if fl==True:
             cl=True
             print('control()')
         print('Чтобы изменить расписание, введите "расписание".')

@@ -13,7 +13,7 @@ a=[' понедельник', 'о вторник',' среду',' четверг
 def days():
     o=False
     while o==False:
-        print(f'\nВведите номера учебников')
+        print(f'\nВведите номера учебников.')
         for q in a:
             d=[]
             print(f'    в{q}:')
@@ -120,20 +120,20 @@ def control():
             cl=True
     else:
         print(f'\nНе удалось найти подходящее распределение.\nПопробуйте изменить максимальное значение для амплитуды весов.')
-        mx=input('Введите новое значение: ')
         try:
-            mx=float(mx)
+            mx=float(input('Введите новое значение: '))
             fl=True
         except:
             fl=False
-            print('error')
+            print('┐(￣ヘ￣)┌')
         if fl==True:
             cl=True
         print('Чтобы изменить расписание, введите "расписание".')
         ee=input(' ')
         if ee=='расписание':
-            days()
             cl=True
+            days()
 if cl==True:
-    print('...')
     control()
+else:
+    print('Для нового запуска программы, перезагрузите страницу.')

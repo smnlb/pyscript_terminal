@@ -135,4 +135,5 @@ def control():
             days()
             cl=True
 if cl==True:
+    print('...')
     control()

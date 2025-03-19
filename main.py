@@ -120,17 +120,15 @@ def control():
             cl=True
     else:
         print(f'\nНе удалось найти подходящее распределение.\nПопробуйте изменить максимальное значение для амплитуды весов.')
-        mx=input()
+        mx=input('Введите новое значение: ')
         try:
             mx=float(mx)
             fl=True
-            print('mx=float(mx)')
         except:
             fl=False
-            print('except')
+            print('error')
         if fl==True:
             cl=True
-            print('control()')
         print('Чтобы изменить расписание, введите "расписание".')
         ee=input()
         if ee=='расписание':

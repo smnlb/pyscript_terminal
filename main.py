@@ -133,7 +133,7 @@ def control():
         if ee=='расписание':
             cl=True
             days()
-if cl==True:
+while cl==True:
     control()
 else:
     print('Для нового запуска программы, перезагрузите страницу.')

@@ -133,7 +133,7 @@ def control():
         if ee=='расписание':
             cl=True
             days()
-        else:
+        elif fl==False:
             ee=input(f'Чтобы выйти из программы, введите "выйти".\n    ')
             print()
             if ee=='выйти':

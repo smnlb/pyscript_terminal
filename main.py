@@ -69,7 +69,7 @@ for u in range(2**nn):
     k.append([e1,e2])
     e1,e2=[],[]
 def control():
-    global n1,n2,c,mx
+    global n1,n2,c,mx,cl
     c,cl,rtrue=0,False,[l for l in r if l]
     for s in x:
         c+=s[0]

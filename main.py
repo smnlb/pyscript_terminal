@@ -134,7 +134,8 @@ def control():
             cl=True
             days()
         else:
-            ee=input(f'\nЧтобы выйти из программы, введите "выйти".')
+            ee=input(f'Чтобы выйти из программы, введите "выйти".\n    ')
+            print()
             if ee=='выйти':
                 cl=False
 while cl==True:

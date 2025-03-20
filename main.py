@@ -136,4 +136,5 @@ def control():
 while cl==True:
     control()
 else:
+    __terminal__.clear()
     print(f'\nДля нового запуска программы, перезагрузите страницу.')

@@ -3,7 +3,7 @@ from random import shuffle
 n1,n2,e1,e2,r,k,rr,nn,dd,t1,t2,t3,t4,mx,cl=[],[],[],[],[],[],[],0,0,0,0,0,0,0.6,True
 while not str(nn).isdigit() or nn<=0:
     try:
-        nn=int(input(f'Введите количество ваших учебников:\n'))
+        nn=int(input(f'Введите количество ваших учебников:\n    '))
         if nn<=0:
             print('(o_O)')
     except:

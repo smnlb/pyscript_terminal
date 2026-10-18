@@ -1,145 +1,200 @@
 from itertools import product
-from random import shuffle
-n1,n2,e1,e2,r,k,rr,nn,dd,t1,t2,t3,t4,mx,cl=[],[],[],[],[],[],[],0,0,0,0,0,0,0.6,True
-while not str(nn).isdigit() or nn<=0:
-    try:
-        nn=int(input(f'Введите количество ваших учебников:\n    '))
-        if nn<=0:
-            print('(o_O)')
-    except:
-        print('(︶︹︺)')
-x=[0 for ___ in range(nn)]
-a=[' понедельник', 'о вторник',' среду',' четверг',' пятницу',' субботу']
-def days():
-    o=False
-    while o==False:
-        print(f'\nВведите номера учебников.')
-        for q in a:
-            d=[]
-            print(f'    в{q}:')
+from random import shuffle, random
+
+SAD = '(︶︹︺)'
+CONFUSED = '(o_O)'
+GIVE_UP = '┐(￣ヘ￣)┌'
+
+DAYS = [
+    'в понедельник',
+    'во вторник',
+    'в среду',
+    'в четверг',
+    'в пятницу',
+    'в субботу',
+]
+
+def ask_positive_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+        except (ValueError, EOFError):
+            print(SAD)
+            continue
+        if value <= 0:
+            print(CONFUSED)
+            continue
+        return value
+
+def ask_schedule(nn):
+    while True:
+        schedule = []
+        print('\nВведите номера учебников.')
+        for day_name in DAYS:
+            print(f'    {day_name}:')
+            day_textbooks = []
             while True:
-                dd=0
-                while not str(dd).isdigit() and dd!='' or int(dd)<=0 or int(dd)>nn:
+                try:
+                    line = input('    ')
+                except EOFError:
+                    line = ''
+                if line == '':
+                    break
+                for token in line.split():
                     try:
-                        dd=input('    ')
-                        if dd=='':
-                            break
-                        if int(dd)>nn or int(dd)<=0:
-                            print(f'(o_O)\nНомер не записан')
-                    except:
-                        print('(︶︹︺)')
-                if dd=='':
-                    break
-                d.append(int(dd))
-            r.append(d)
-        if len([l for l in r if l])!=0:
-            o=True
-        else:
-            print('(o_O)')
-days()
-for v in r:
-    for w in v:
-        rr.append(w)
-for j in range(nn):
-    st=''
-    print(f'Введите размеры {j+1} учебника:\n')
-    while not st.isdigit() or t3<=0 or t4<=0 or t1<0 or t2!=1 and t2!=2:
+                        num = int(token)
+                    except ValueError:
+                        print(SAD)
+                        continue
+                    if 1 <= num <= nn:
+                        day_textbooks.append(num)
+                    else:
+                        print(f'{CONFUSED}\nНомер не записан')
+            schedule.append(day_textbooks)
+        if any(schedule):
+            return schedule
+        print(CONFUSED)
+
+def ask_textbook_params(idx):
+    print(f'Введите размеры {idx} учебника:\n')
+    while True:
         try:
-            hh=(t1:=int(input(f'    количество страниц: ')))+(t2:=int(input(f'    тип обложки:\n     1-мягкая\n     2-твёрдая   ')))*5
-            vv=hh*(t3:=int(input(f'    длина(см): ')))*(t4:=int(input(f'    ширина(см): ')))
-            vvv=vv*rr.count(j+1)
-            x[j]=[vvv,[vv,j+1]]
-            if t3<=0 or t4<=0 or t1<0 or t2!=1 and t2!=2:
-                print(f'(o_O)\nПопробуйте ещё раз')
-            st=''.join([str(t1),str(t2),str(t3),str(t4)])
-        except:
-            print('(︶︹︺)')
-print('')
-aa=list(product([0,1], repeat=nn))
-shuffle(aa)
-for u in range(2**nn):
-    aaa=list(aa[u])
-    for i in [[aaa[l],x[l][0],x[l][1]] for l in range(nn)]:
-        if i[0]==0:
-            e1.append([i[1],i[2]])
-            e2.append([0,[0,0]])
-        else:
-            e2.append([i[1],i[2]])
-            e1.append([0,[0,0]])
-    k.append([e1,e2])
-    e1,e2=[],[]
-def control():
-    global n1,n2,c,mx,cl
-    c,cl,rtrue=0,False,[l for l in r if l]
-    for s in x:
-        c+=s[0]
-    cc,Flag=c/len(rtrue),True
-    for y in k:
-        mx1,mx2=0,0
-        for g in range(2):
-            summ1=0
-            for h in range(len(y[g])):
-                summ1+=int(y[g][h][0])
-            if g==0:
-                summ2,summ1=summ1,0
-        p=abs(summ1-summ2)
-        print('     ',summ1,summ2)
-        for v in r:
-            if v:
-                for gg in range(2):
-                    summd1=0
-                    for hh in range(len(y[gg])):
-                        summd1+=int(y[gg][hh][1][0]*v.count(y[gg][hh][1][1]))
-                    if gg == 0:
-                        summd2,summd1=summd1,0
-                pd1,pd2=abs(summd1-cc)/cc,abs(summd2-cc)/cc
-                if pd1>mx1:
-                    mx1=pd1
-                if pd2>mx2:
-                    mx2=pd2
-                if pd1>mx or pd2>mx:
-                    flag=False
-                    break
-                else:
-                    flag=True
-        if p<c and flag==True:
-            c=p
-            n1=[i[1][1] for i in y[0] if i[1][1]!=0]
-            n2=[i[1][1] for i in y[1] if i[1][1]!=0]
-        print(max(mx1,mx2))
-    if n1 or n2:
-        print(f'\nМинимальная разница в весе = {c},\nсоответствующее распределение: {n1},{n2}')
-        print(f'\nЧтобы изменить максимальную амплитуду весов, введите "амплитуда".\nЧтобы изменить расписание, введите "расписание".')
-        ee=input('    ')
-        if ee=='амплитуда':
-            mx=float(input('Введите новое значение: '))
-            cl=True
-        control()
-        if ee=='расписание':
-            days()
-            cl=True
+            pages = int(input('    количество страниц: '))
+            cover = int(input('    тип обложки:\n     1-мягкая\n     2-твёрдая   '))
+            length = int(input('    длина(см): '))
+            width = int(input('    ширина(см): '))
+        except (ValueError, EOFError):
+            print(SAD)
+            continue
+        if pages < 0 or cover not in (1, 2) or length <= 0 or width <= 0:
+            print(f'{CONFUSED}\nПопробуйте ещё раз')
+            continue
+        return (pages + cover * 5) * length * width
+
+
+def compute_solution(nn, schedule, per_day_weights, amplitude):
+    usage_count = [0] * nn
+    for day in schedule:
+        for num in day:
+            usage_count[num - 1] += 1
+
+    total_weights = [per_day_weights[i] * usage_count[i] for i in range(nn)]
+    grand_total = sum(total_weights)
+
+    active_days = [day for day in schedule if day]
+    if not active_days:
+        return None
+
+    target = grand_total / len(active_days)
+
+    if nn > 1:
+        tail_combos = list(product([0, 1], repeat=nn - 1))
     else:
-        print(f'\nНе удалось найти подходящее распределение.\nПопробуйте изменить максимальную амплитуду весов.\n')
-        try:
-            mx=float(input('Введите новое значение: '))
-            fl=True
-        except:
-            fl=False
-            print('┐(￣ヘ￣)┌')
-        if fl==True:
-            cl=True
-        print(f'\nЧтобы изменить расписание, введите "расписание".')
-        ee=input('    ')
-        if ee=='расписание':
-            cl=True
-            days()
-        elif fl==False:
-            ee=input(f'Чтобы выйти из программы, введите "выйти".\n    ')
-            print()
-            if ee=='выйти':
-                cl=False
-while cl==True:
-    control()
-else:
-    __terminal__.clear()
-    print(f'\nДля нового запуска программы, перезагрузите страницу.')
+        tail_combos = [()]
+    shuffle(tail_combos)
+
+    best_diff = float('inf')
+    best_combo = None
+
+    for tail in tail_combos:
+        # Суммарные веса
+        weight_a = total_weights[0]
+        weight_b = 0
+        for i, bit in enumerate(tail):
+            if bit == 0:
+                weight_a += total_weights[i + 1]
+            else:
+                weight_b += total_weights[i + 1]
+
+        diff = abs(weight_a - weight_b)
+        if diff >= best_diff:
+            continue 
+
+        valid = True
+        for day in active_days:
+            w_a = 0
+            w_b = 0
+            for num in day:
+                idx = num - 1
+                if idx == 0 or tail[idx - 1] == 0:
+                    w_a += per_day_weights[idx]
+                else:
+                    w_b += per_day_weights[idx]
+            if target > 0:
+                dev_a = abs(w_a - target) / target
+                dev_b = abs(w_b - target) / target
+                if dev_a > amplitude or dev_b > amplitude:
+                    valid = False
+                    break
+
+        if valid:
+            best_diff = diff
+            best_combo = (0,) + tail
+
+    if best_combo is None:
+        return None
+
+    n1 = [i + 1 for i, bit in enumerate(best_combo) if bit == 0]
+    n2 = [i + 1 for i, bit in enumerate(best_combo) if bit == 1]
+
+    if random() < 0.5:
+        n1, n2 = n2, n1
+
+    return n1, n2, best_diff, target
+
+def main():
+    nn = ask_positive_int('Введите количество ваших учебников:\n    ')
+    schedule = ask_schedule(nn)
+    per_day_weights = [ask_textbook_params(j + 1) for j in range(nn)]
+
+    if nn > 18:
+        print(f'\nВнимание: для {nn} учебников перебор может занять продолжительное время.')
+
+    amplitude = 0.6
+
+    while True:
+        result = compute_solution(nn, schedule, per_day_weights, amplitude)
+
+        if result is None:
+            print('\nНе удалось найти подходящее распределение.')
+            print('Попробуйте изменить максимальную амплитуду весов.\n')
+            try:
+                amplitude = float(input('Введите новое значение: '))
+                continue
+            except (ValueError, EOFError):
+                print(GIVE_UP)
+            print('\nЧтобы изменить расписание, введите "расписание".')
+            if input('    ') == 'расписание':
+                schedule = ask_schedule(nn)
+                continue
+            if input('Чтобы выйти из программы, введите "выйти".\n    ') == 'выйти':
+                break
+            break
+
+        n1, n2, min_diff, _target = result
+        print(f'\nМинимальная разница в весе = {min_diff},')
+        print(f'соответствующее распределение: {n1},{n2}')
+        print()
+        print('Чтобы изменить максимальную амплитуду весов, введите "амплитуда".')
+        print('Чтобы изменить расписание, введите "расписание".')
+        print('Чтобы выйти, введите "выйти".')
+        answer = input('    ')
+
+        if answer == 'амплитуда':
+            try:
+                amplitude = float(input('Введите новое значение: '))
+            except (ValueError, EOFError):
+                print(GIVE_UP)
+            continue
+        if answer == 'расписание':
+            schedule = ask_schedule(nn)
+            continue
+        break  # в том числе "выйти" и любой другой ввод — завершаем
+
+    try:
+        __terminal__.clear()
+    except (NameError, AttributeError):
+        pass
+    print('\nДля нового запуска программы, перезагрузите страницу.')
+
+main()

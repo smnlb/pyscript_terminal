@@ -1,71 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head> 
-    <!-- design -->
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple browser-based tool that divides textbooks equally between two people. Runs entirely client-side with PyScript.">
+    <meta name="theme-color" content="#151719">
+    <title>PyScript — Textbook Splitter</title>
+
+    <link rel="icon" type="image/webp" href="logo.webp" />
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <title>PyScript</title>
-    <link rel="icon" type="image/webp" href="logo.webp" />
-    
+
+    <!-- Site styles -->
+    <link type="text/css" rel="stylesheet" href="styles.css">
+
     <!-- PyScript -->
     <script src="./mini-coi.js" scope="./"></script>
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.11.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.11.1/core.js"></script>
 
-    <!-- for splashscreen -->
+    <!-- Splash screen -->
     <style>
-        #loading { outline: none; border: none; background: transparent }
+        #loading { outline: none; border: none; background: transparent; }
+        #loading::backdrop { background: rgba(21, 23, 25, 0.4); }
+        #loading h1, #loading p { text-align: center; }
     </style>
     <script type="module">
-       const loading = document.getElementById('loading');
-       addEventListener('py:ready', () => loading.close());
-       loading.showModal();
+        const loadingDialog = document.getElementById('loading');
+        const loadingHint = document.getElementById('loading-hint');
+
+        const hideLoading = () => {
+            if (loadingDialog?.open) loadingDialog.close();
+        };
+
+        window.addEventListener('py:ready', hideLoading);
+
+        if (loadingDialog && typeof loadingDialog.showModal === 'function') {
+            loadingDialog.showModal();
+
+            setTimeout(() => {
+                if (!loadingDialog.open) return;
+                if (loadingHint) {
+                    loadingHint.textContent = 'Still loading… check the browser console.';
+                }
+                const closeBtn = document.createElement('button');
+                closeBtn.type = 'button';
+                closeBtn.textContent = 'Close';
+                closeBtn.addEventListener('click', hideLoading);
+                loadingDialog.append(closeBtn);
+            }, 20000);
+        }
     </script>
 </head>
 
- <body style="margin-left:40px" >
-     <dialog id="loading">
-        <h1 style="color: #d7d7d7">Loading...</h1>
-     </dialog>
-     <ul class="sidenav">
-        <li><a href="https://github.com/smnlb" style="color: #151719">my github</a></li>
-        <li><a href="https://t.me/lIlllIlIIIl" style="color: #151719">my telegram channel</a></li>
-        <li><a href="https://github.com/HelloZeroNet/ZeroNet" style="color: #151719">zeronet</a></li>
-        <li><a href="https://sethm.me/worm-sim/" style="color: #151719">worm</a></li>
-        <li><a href="https://smnlb.github.io/tokipona/" style="color: #151719">tokipona</a></li>
-    </ul>
-  
-    <div class="content">
-    <p>
-        This is a simple program to divide textbooks equally between 2 people.
-    </p>
-    <p>
-        Loading may take a few seconds; please be patient.
-    </p>
+<body style="margin-left:40px">
+    <noscript>
+        <p style="color:#b00020">
+            This page runs Python in your browser and needs JavaScript enabled.
+        </p>
+    </noscript>
 
-    <section class="pyscript">
-    <b>
-     <p>
-      Now is 
-      <script type="py">
-         from pyscript import display
-         from datetime import datetime
-         now = datetime.now()
-         display(now.strftime("%m/%d/%Y, %H:%M:%S"))
-      </script>
-     </p>
-    </b>
-    <div id="terminal">
-        <script id="console" type="py" src="./main.py" config="./pyscript.toml" terminal worker></script>
+    <dialog id="loading">
+        <h1 style="color:#d7d7d7">Loading…</h1>
+        <p id="loading-hint" style="color:#d7d7d7; font-size:.9em;">This may take a few seconds.</p>
+    </dialog>
+
+    <ul class="sidenav">
+        <li><a href="https://github.com/smnlb" target="_blank" rel="noopener noreferrer" style="color: #151719">my github</a></li>
+        <li><a href="https://t.me/lIlllIlIIIl" target="_blank" rel="noopener noreferrer" style="color: #151719">my telegram channel</a></li>
+        <li><a href="https://github.com/HelloZeroNet/ZeroNet" target="_blank" rel="noopener noreferrer" style="color: #151719">zeronet</a></li>
+        <li><a href="https://sethm.me/worm-sim/" target="_blank" rel="noopener noreferrer" style="color: #151719">worm</a></li>
+        <li><a href="https://smnlb.github.io/tokipona/" target="_blank" rel="noopener noreferrer" style="color: #151719">tokipona</a></li>
+    </ul>
+
+    <div class="content">
+        <p>
+            This is a simple program to divide textbooks equally between 2 people.
+        </p>
+        <p>
+            Loading may take a few seconds.
+        </p>
+
+        <section class="pyscript">
+            <b>
+                <p>
+                    Now is <span id="now">…</span>
+                </p>
+            </b>
+
+            <script type="py">
+                import asyncio
+                from datetime import datetime
+
+                from pyscript import display
+
+                TIME_FORMAT = "%m/%d/%Y, %H:%M:%S"
+
+                def render_time():
+                    display(datetime.now().strftime(TIME_FORMAT), target="now", append=False)
+
+                render_time()
+
+                async def tick():
+                    while True:
+                        await asyncio.sleep(1)
+                        render_time()
+                try:
+                    asyncio.ensure_future(tick())
+                except Exception as exc:
+                    print(f"Live clock disabled: {exc}")
+            </script>
+
+            <div id="terminal">
+                <script id="console" type="py" src="./main.py" config="./pyscript.toml" terminal worker></script>
+            </div>
+        </section>
+
+        <div class="explanation">
+            Terminal user interface seems more convenient.
+        </div>
     </div>
-    </section>
-         
-    <div class="explanation">
-        I tried to make the right user interface, but the terminal seemed more convenient.
-    </div>    
 </body>
 </html>
